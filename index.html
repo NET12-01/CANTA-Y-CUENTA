@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canta y Cuenta - Aprende y Canta</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #a78bfa 0%, #7dd3fc 100%);
+    min-height: 100vh;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    color: white;
+    font-size: 2.8rem;
+    margin-bottom: 25px;
+    text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+  }
+  .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  @media (max-width: 900px) {
+    .container { grid-template-columns: 1fr; }
+    h1 { font-size: 2.2rem; }
+  }
+  .card {
+    background: white;
+    border-radius: 30px;
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  }
+  .card h2 {
+    font-size: 1.8rem;
+    color: #5b21b6;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  /* SECCIÓN VOZ */
+  .numeros-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+  .numero-btn {
+    aspect-ratio: 1;
+    font-size: 2.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #d97706;
+    transition: all 0.1s;
+  }
+  .numero-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #d97706;
+  }
+  #visual {
+    text-align: center;
+    font-size: 3.2rem;
+    min-height: 70px;
+    margin: 10px 0 20px;
+    transition: transform 0.2s;
+    word-break: break-all; /* Evita que las estrellas rompan el diseño en pantallas chicas */
+  }
+  .palabras-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .palabra-btn {
+    padding: 18px 10px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    color: white;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+    transition: all 0.1s;
+  }
+  .palabra-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+  .rojo { background: #ef4444; box-shadow: 0 5px 0 #b91c1c; }
+  .azul { background: #3b82f6; box-shadow: 0 5px 0 #1d4ed8; }
+  .verde { background: #22c55e; box-shadow: 0 5px 0 #15803d; }
+  .amarillo { background: #eab308; box-shadow: 0 5px 0 #a16207; }
+  .mama { background: #ec4899; box-shadow: 0 5px 0 #be185d; }
+  .papa { background: #8b5cf6; box-shadow: 0 5px 0 #6d28d9; }
+
+  /* REPRODUCTOR */
+  .player-cover {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 20px;
+    border-radius: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+  }
+  .player-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .song-title {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #1f2937;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  .song-artist {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+  .progress-container {
+    background: #e5e7eb;
+    height: 14px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.1s;
+  }
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 25px;
+  }
+  .control-btn {
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    background: #f3f4f6;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #d1d5db;
+  }
+  .control-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #d1d5db; }
+  .play-btn {
+    width: 85px;
+    height: 85px;
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    color: white;
+    font-size: 2.2rem;
+    box-shadow: 0 6px 0 #5b21b6;
+  }
+  .playlist {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .playlist-item {
+    padding: 14px;
+    margin-bottom: 8px;
+    background: #f9fafb;
+    border-radius: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+  }
+  .playlist-item:hover { background: #f3e8ff; }
+  .playlist-item.active {
+    background: #ede9fe;
+    border: 2px solid #8b5cf6;
+  }
+  .playlist-img { 
+    width: 40px; 
+    height: 40px; 
+    border-radius: 8px; 
+    object-fit: cover; 
+  }
+</style>
+</head>
+<body>
+  <h1>🌟 Canta y Cuenta 🌟</h1>
+  
+  <div class="container">
+    <div class="card">
+      <h2>🗣️ Aprende con Voz</h2>
+      
+      <h3 style="margin-bottom:12px; color:#374151;">Números del 1 al 10:</h3>
+      <div class="numeros-grid" id="numeros"></div>
+      <div id="visual"></div>
+      
+      <h3 style="margin: 15px 0 12px; color:#374151;">Palabras y Colores:</h3>
+      <div class="palabras-grid">
+        <button class="palabra-btn rojo" onclick="hablar('rojo')">Rojo</button>
+        <button class="palabra-btn azul" onclick="hablar('azul')">Azul</button>
+        <button class="palabra-btn verde" onclick="hablar('verde')">Verde</button>
+        <button class="palabra-btn amarillo" onclick="hablar('amarillo')">Amarillo</button>
+        <button class="palabra-btn mama" onclick="hablar('mamá')">Mamá</button>
+        <button class="palabra-btn papa" onclick="hablar('papá')">Papá</button>
+        <button class="palabra-btn" style="background:#f97316; box-shadow:0 5px 0 #c2410c" onclick="hablar('hola')">Hola</button>
+        <button class="palabra-btn" style="background:#14b8a6; box-shadow:0 5px 0 #0f766e" onclick="hablar('gracias')">Gracias</button>
+        <button class="palabra-btn" style="background:#6366f1; box-shadow:0 5px 0 #4338ca" onclick="hablar('adiós')">Adiós</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🎵 Mi Música</h2>
+      
+      <div class="player-cover">
+        <img id="coverImg" src="imagenes/cancion-1.jpg" alt="Portada">
+      </div>
+      <div class="song-title" id="title">Flores y Números</div>
+      <div class="song-artist">Canta y Cuenta</div>
+      
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      
+      <div class="controls">
+        <button class="control-btn" onclick="anterior()">⏮️</button>
+        <button class="control-btn play-btn" id="playBtn" onclick="togglePlay()">▶️</button>
+        <button class="control-btn" onclick="siguiente()">⏭️</button>
+      </div>
+      
+      <div class="playlist" id="playlist"></div>
+      
+      <audio id="audio" preload="metadata"></audio>
+    </div>
+  </div>
+
+<script>
+  // ===== VOZ ARGENTINA =====
+  const numerosNombres = ['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve','diez'];
+  const numerosContainer = document.getElementById('numeros');
+  const visual = document.getElementById('visual');
+  
+  for(let i=1; i<=10; i++){
+    const btn = document.createElement('button');
+    btn.className = 'numero-btn';
+    btn.textContent = i;
+    btn.onclick = () => hablar(numerosNombres[i], true);
+    numerosContainer.appendChild(btn);
+  }
+
+  function hablar(texto, esNumero=false){
+    if(!('speechSynthesis' in window)) return;
+    
+    // MEJORA 1: Si hay música sonando, la pausamos automáticamente para escuchar la voz clara
+    if(!audio.paused) {
+      audio.pause();
+      playBtn.textContent = '▶️';
+    }
+
+    speechSynthesis.cancel();
+    
+    const msg = new SpeechSynthesisUtterance(texto);
+    msg.lang = 'es-AR'; 
+    msg.rate = 0.75; // Un pelín más lento para niños chicos
+    msg.pitch = 1.15;
+    speechSynthesis.speak(msg);
+
+    if(esNumero){
+      const mapa = {uno:1,dos:2,tres:3,cuatro:4,cinco:5,seis:6,siete:7,ocho:8,nueve:9,diez:10};
+      const n = mapa[texto] || 0;
+      if(n && visual){
+        visual.textContent = '⭐'.repeat(n);
+        visual.style.transform = 'scale(1.2)';
+        setTimeout(()=> visual.style.transform = 'scale(1)', 200);
+      }
+      
+      const feedback = new SpeechSynthesisUtterance(`¡Muy bien, ${texto}!`);
+      feedback.lang = 'es-AR';
+      feedback.rate = 0.85;
+      feedback.pitch = 1.3;
+      speechSynthesis.speak(feedback);
+    } else {
+      if(visual) visual.textContent = '';
+    }
+  }
+
+  // ===== REPRODUCTOR =====
+  // MEJORA 2: Se cambiaron los íconos de texto por las rutas a tus imágenes reales
+  const playlist = [
+    { titulo: "Flores y Números", src: "CANCIONES/Flores y Números.mp3", img: "imagenes/cancion-1.jpg" },
+    { titulo: "El Tren de la Amistad", src: "CANCIONES/Eltrendelaamistad.mp3", img: "imagenes/cancion-2.jpg" },
+    { titulo: "Canción 2", src: "CANCIONES/cancion2.mp3", img: "imagenes/cancion-1.jpg" },
+    { titulo: "Canción 3", src: "CANCIONES/cancion3.mp3", img: "imagenes/cancion-2.jpg" }
+  ];
+
+  let currentIndex = 0;
+  const audio = document.getElementById('audio');
+  const playBtn = document.getElementById('playBtn');
+  const titleEl = document.getElementById('title');
+  const coverImg = document.getElementById('coverImg');
+  const progressBar = document.getElementById('progressBar');
+  const progressContainer = document.getElementById('progressContainer');
+  const playlistEl = document.getElementById('playlist');
+
+  function cargarCancion(index, anunciarVoz = true){
+    currentIndex = index;
+    const song = playlist[index];
+    audio.src = song.src;
+    titleEl.textContent = song.titulo;
+    coverImg.src = song.img; // Carga la foto real en el reproductor principal
+    
+    document.querySelectorAll('.playlist-item').forEach((el,i)=>{
+      el.classList.toggle('active', i===index);
+    });
+    
+    // MEJORA 3: Solo anuncia el título con voz si el usuario interactuó (hizo clic), evitando bloqueos del navegador
+    if (anunciarVoz) {
+      hablar(song.titulo);
+    }
+  }
+
+  function togglePlay(){
+    if(audio.paused){
+      speechSynthesis.cancel(); // Cancela cualquier lección de voz si empieza la música
+      audio.play().catch(()=>{});
+      playBtn.textContent = '⏸️';
+    } else {
+      audio.pause();
+      playBtn.textContent = '▶️';
+    }
+  }
+
+  function siguiente(){
+    cargarCancion((currentIndex + 1) % playlist.length);
+    audio.play().catch(()=>{});
+    playBtn.textContent = '⏸️';
+  }
+
+  function anterior(){
+    cargarCancion((currentIndex - 1 + playlist.length) % playlist.length);
+    audio.play().catch(()=>{});
+    playBtn.textContent = '⏸️';
+  }
+
+  audio.addEventListener('timeupdate', ()=>{
+    if(audio.duration){
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progressBar.style.width = percent + '%';
+    }
+  });
+
+  audio.addEventListener('ended', siguiente);
+
+  progressContainer.addEventListener('click', (e)=>{
+    const width = progressContainer.clientWidth;
+    const clickX = e.offsetX;
+    if(audio.duration) audio.currentTime = (clickX / width) * audio.duration;
+  });
+
+  // Crear playlist visual con imágenes pequeñas al lado de los títulos
+  playlist.forEach((song, i)=>{
+    const item = document.createElement('div');
+    item.className = 'playlist-item';
+    if(i===0) item.classList.add('active');
+    item.innerHTML = `<img class="playlist-img" src="${song.img}" alt=""><span>${song.titulo}</span>`;
+    item.onclick = ()=>{ 
+      cargarCancion(i); 
+      audio.play().catch(()=>{}); 
+      playBtn.textContent='⏸️'; 
+    };
+    playlistEl.appendChild(item);
+  });
+
+  // Carga inicial pasiva (anunciarVoz = false para no romper las políticas del navegador)
+  cargarCancion(0, false);
+</script>
+</body>
+</html>
