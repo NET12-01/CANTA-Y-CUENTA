@@ -18,6 +18,7 @@
     font-size: 2.8rem;
     margin-bottom: 25px;
     text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
+    letter-spacing: 2px;
   }
   .container {
     display: grid;
@@ -31,11 +32,14 @@
     h1 { font-size: 2.2rem; }
   }
   .card {
-    background: white;
+    background: rgba(255,255,255,0.92);
     border-radius: 30px;
     padding: 28px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    backdrop-filter: blur(4px);
+    transition: transform 0.2s;
   }
+  .card:hover { transform: scale(1.01); }
   .card h2 {
     font-size: 1.8rem;
     color: #5b21b6;
@@ -44,7 +48,6 @@
     align-items: center;
     gap: 10px;
   }
-  /* SECCIÓN VOZ */
   .numeros-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -60,11 +63,11 @@
     background: linear-gradient(135deg, #fbbf24, #f59e0b);
     color: white;
     cursor: pointer;
-    box-shadow: 0 5px 0 #d97706;
-    transition: all 0.1s;
+    box-shadow: 0 6px 0 #d97706;
+    transition: all 0.08s ease;
   }
   .numero-btn:active {
-    transform: translateY(3px);
+    transform: translateY(4px);
     box-shadow: 0 2px 0 #d97706;
   }
   #visual {
@@ -74,10 +77,32 @@
     margin: 10px 0 20px;
     transition: transform 0.2s;
   }
+  .abecedario-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .letra-btn {
+    aspect-ratio: 1;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 14px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    transition: all 0.08s;
+  }
+  .letra-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+  }
   .palabras-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
+    margin-top: 5px;
   }
   .palabra-btn {
     padding: 18px 10px;
@@ -88,23 +113,40 @@
     cursor: pointer;
     color: white;
     box-shadow: 0 5px 0 rgba(0,0,0,0.2);
-    transition: all 0.1s;
+    transition: all 0.08s;
   }
-  .palabra-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+  .palabra-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
   .rojo { background: #ef4444; box-shadow: 0 5px 0 #b91c1c; }
   .azul { background: #3b82f6; box-shadow: 0 5px 0 #1d4ed8; }
   .verde { background: #22c55e; box-shadow: 0 5px 0 #15803d; }
   .amarillo { background: #eab308; box-shadow: 0 5px 0 #a16207; }
-  .mama { background: #ec4899; box-shadow: 0 5px 0 #be185d; }
   .papa { background: #8b5cf6; box-shadow: 0 5px 0 #6d28d9; }
+  .naranja { background: #f97316; box-shadow: 0 5px 0 #c2410c; }
+  .cian { background: #14b8a6; box-shadow: 0 5px 0 #0f766e; }
+  .indigo { background: #6366f1; box-shadow: 0 5px 0 #4338ca; }
+  .rosa { background: #ec4899; box-shadow: 0 5px 0 #be185d; }
+  .stop-btn {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #991b1b;
+    transition: all 0.08s;
+    width: 100%;
+  }
+  .stop-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #991b1b; }
 
-  /* REPRODUCTOR */
   .player-cover {
     width: 180px;
     height: 180px;
     margin: 0 auto 20px;
     background: linear-gradient(135deg, #a78bfa, #7dd3fc);
-    border-radius: 25px;
+    border-radius: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,13 +157,21 @@
     text-align: center;
     font-size: 1.5rem;
     color: #1f2937;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     font-weight: bold;
   }
   .song-artist {
     text-align: center;
     color: #6b7280;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
+    font-size: 1rem;
+  }
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #4b5563;
+    margin-bottom: 6px;
   }
   .progress-container {
     background: #e5e7eb;
@@ -136,7 +186,7 @@
     background: linear-gradient(90deg, #8b5cf6, #3b82f6);
     width: 0%;
     border-radius: 10px;
-    transition: width 0.1s;
+    transition: width 0.05s linear;
   }
   .controls {
     display: flex;
@@ -154,8 +204,9 @@
     font-size: 1.5rem;
     cursor: pointer;
     box-shadow: 0 4px 0 #d1d5db;
+    transition: all 0.08s;
   }
-  .control-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #d1d5db; }
+  .control-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #d1d5db; }
   .play-btn {
     width: 85px;
     height: 85px;
@@ -178,11 +229,12 @@
     align-items: center;
     gap: 12px;
     transition: all 0.2s;
+    border: 2px solid transparent;
   }
   .playlist-item:hover { background: #f3e8ff; }
   .playlist-item.active {
     background: #ede9fe;
-    border: 2px solid #8b5cf6;
+    border-color: #8b5cf6;
   }
   .playlist-icon { font-size: 1.5rem; }
 </style>
@@ -199,27 +251,27 @@
       <div class="numeros-grid" id="numeros"></div>
       <div id="visual"></div>
       
+      <h3 style="margin: 15px 0 12px; color:#374151;">Abecedario:</h3>
+      <div class="abecedario-grid" id="abecedario"></div>
+      
       <h3 style="margin: 15px 0 12px; color:#374151;">Palabras y Colores:</h3>
-      <div class="palabras-grid">
-        <button class="palabra-btn rojo" onclick="hablar('rojo')">Rojo</button>
-        <button class="palabra-btn azul" onclick="hablar('azul')">Azul</button>
-        <button class="palabra-btn verde" onclick="hablar('verde')">Verde</button>
-        <button class="palabra-btn amarillo" onclick="hablar('amarillo')">Amarillo</button>
-        <button class="palabra-btn papa" onclick="hablar('papá')">Papá</button>
-        <button class="palabra-btn" style="background:#f97316; box-shadow:0 5px 0 #c2410c" onclick="hablar('hola')">Hola</button>
-        <button class="palabra-btn" style="background:#14b8a6; box-shadow:0 5px 0 #0f766e" onclick="hablar('gracias')">Gracias</button>
-        <button class="palabra-btn" style="background:#6366f1; box-shadow:0 5px 0 #4338ca" onclick="hablar('adiós')">Adiós</button>
-      </div>
+      <div class="palabras-grid" id="palabras"></div>
+      
+      <button class="stop-btn" onclick="detenerVoz()">🔇 ¡Silencio!</button>
     </div>
 
     <!-- LADO DERECHO: REPRODUCTOR -->
     <div class="card">
       <h2>🎵 Mi Música</h2>
       
-      <div class="player-cover" id="cover">🌸</div>
-      <div class="song-title" id="title">Flores y Números</div>
+      <div class="player-cover" id="cover">🎵</div>
+      <div class="song-title" id="title">Canción 1</div>
       <div class="song-artist">Canta y Cuenta</div>
       
+      <div class="time-row">
+        <span id="currentTime">0:00</span>
+        <span id="totalTime">0:00</span>
+      </div>
       <div class="progress-container" id="progressContainer">
         <div class="progress-bar" id="progressBar"></div>
       </div>
@@ -237,55 +289,125 @@
   </div>
 
 <script>
-  // ===== VOZ ARGENTINA =====
+  // ===== VOZ ARGENTINA MEJORADA =====
+  let vozSeleccionada = null;
+  let encolarFeedback = false;
+  let numeroActual = '';
+
+  function inicializarVoz() {
+    if (!('speechSynthesis' in window)) return;
+    const voces = speechSynthesis.getVoices();
+    vozSeleccionada = voces.find(v => v.lang.includes('es-AR')) ||
+                      voces.find(v => v.lang.includes('es-ES')) ||
+                      voces.find(v => v.lang.startsWith('es')) ||
+                      null;
+  }
+  if (window.speechSynthesis) {
+    speechSynthesis.onvoiceschanged = inicializarVoz;
+    setTimeout(inicializarVoz, 100);
+  }
+
+  function hablar(texto, esNumero = false) {
+    if (!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+
+    const msg = new SpeechSynthesisUtterance(texto);
+    msg.lang = 'es-AR';
+    msg.rate = 0.78;
+    msg.pitch = 1.15;
+    if (vozSeleccionada) msg.voice = vozSeleccionada;
+
+    if (esNumero) {
+      numeroActual = texto;
+      encolarFeedback = true;
+      msg.onend = function() {
+        if (encolarFeedback) {
+          const feedback = new SpeechSynthesisUtterance(`¡Muy bien, ${numeroActual}!`);
+          feedback.lang = 'es-AR';
+          feedback.rate = 0.85;
+          feedback.pitch = 1.3;
+          if (vozSeleccionada) feedback.voice = vozSeleccionada;
+          speechSynthesis.speak(feedback);
+          encolarFeedback = false;
+        }
+      };
+    } else {
+      encolarFeedback = false;
+    }
+    speechSynthesis.speak(msg);
+  }
+
+  function detenerVoz() {
+    if ('speechSynthesis' in window) {
+      speechSynthesis.cancel();
+      encolarFeedback = false;
+    }
+  }
+
+  // ===== NÚMEROS =====
   const numerosNombres = ['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve','diez'];
   const numerosContainer = document.getElementById('numeros');
   const visual = document.getElementById('visual');
-  
   for(let i=1; i<=10; i++){
     const btn = document.createElement('button');
     btn.className = 'numero-btn';
     btn.textContent = i;
-    btn.onclick = () => hablar(numerosNombres[i], true);
+    btn.setAttribute('aria-label', `Número ${i}`);
+    btn.onclick = () => {
+      hablar(numerosNombres[i], true);
+      visual.textContent = '⭐'.repeat(i);
+      visual.style.transform = 'scale(1.3)';
+      setTimeout(()=> visual.style.transform = 'scale(1)', 300);
+    };
     numerosContainer.appendChild(btn);
   }
 
-  function hablar(texto, esNumero=false){
-    if(!('speechSynthesis' in window)) return;
-    speechSynthesis.cancel();
-    
-    const msg = new SpeechSynthesisUtterance(texto);
-    msg.lang = 'es-AR'; // voz argentina, si no está usa la más cercana
-    msg.rate = 0.78;
-    msg.pitch = 1.15;
-    speechSynthesis.speak(msg);
+  // ===== ABECEDARIO =====
+  const letras = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+  const coloresLetras = ['#ef4444','#f97316','#f59e0b','#eab308','#84cc16','#22c55e','#10b981','#14b8a6','#06b6d4','#0ea5e9','#3b82f6','#6366f1','#8b5cf6','#a855f7','#d946ef','#ec4899','#f43f5e','#f97316','#14b8a6','#3b82f6','#8b5cf6','#ec4899','#22c55e','#eab308','#f59e0b','#ef4444','#6366f1'];
+  const abecedarioContainer = document.getElementById('abecedario');
+  letras.forEach((letra, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'letra-btn';
+    btn.textContent = letra;
+    btn.style.background = coloresLetras[i % coloresLetras.length];
+    btn.setAttribute('aria-label', `Letra ${letra}`);
+    btn.onclick = () => hablar(letra, false);
+    abecedarioContainer.appendChild(btn);
+  });
 
-    if(esNumero){
-      // mostrar estrellitas
-      const mapa = {uno:1,dos:2,tres:3,cuatro:4,cinco:5,seis:6,siete:7,ocho:8,nueve:9,diez:10};
-      const n = mapa[texto] || 0;
-      if(n && visual){
-        visual.textContent = '⭐'.repeat(n);
-        visual.style.transform = 'scale(1.2)';
-        setTimeout(()=> visual.style.transform = 'scale(1)', 200);
-      }
-      // feedback positivo
-      const feedback = new SpeechSynthesisUtterance(`¡Muy bien, ${texto}!`);
-      feedback.lang = 'es-AR';
-      feedback.rate = 0.85;
-      feedback.pitch = 1.3;
-      speechSynthesis.speak(feedback);
-    } else {
-      if(visual) visual.textContent = '';
-    }
-  }
+  // ===== PALABRAS Y COLORES =====
+  const palabras = [
+    { texto: 'Rojo', clase: 'rojo' },
+    { texto: 'Azul', clase: 'azul' },
+    { texto: 'Verde', clase: 'verde' },
+    { texto: 'Amarillo', clase: 'amarillo' },
+    { texto: 'Papá', clase: 'papa' },
+    { texto: 'Mamá', clase: 'rosa' },
+    { texto: 'Hola', clase: 'naranja' },
+    { texto: 'Gracias', clase: 'cian' },
+    { texto: 'Adiós', clase: 'indigo' },
+    { texto: 'Perro', clase: 'rojo' },
+    { texto: 'Gato', clase: 'azul' },
+    { texto: 'Sol', clase: 'amarillo' },
+    { texto: 'Luna', clase: 'verde' },
+    { texto: 'Estrella', clase: 'papa' },
+    { texto: 'Flor', clase: 'rosa' }
+  ];
+  const palabrasContainer = document.getElementById('palabras');
+  palabras.forEach(p => {
+    const btn = document.createElement('button');
+    btn.className = `palabra-btn ${p.clase}`;
+    btn.textContent = p.texto;
+    btn.setAttribute('aria-label', `Palabra ${p.texto}`);
+    btn.onclick = () => hablar(p.texto, false);
+    palabrasContainer.appendChild(btn);
+  });
 
   // ===== REPRODUCTOR =====
   const playlist = [
-    { titulo: "Flores y Números", src: "CANCIONES/Flores y Números.mp3", icono: "🌸" },
-    { titulo: "El Tren de la Amistad", src: "CANCIONES/Eltrendelaamistad.mp3", icono: "🚂" },
-    { titulo: "Canción 2", src: "CANCIONES/cancion2.mp3", icono: "🎶" },
-    { titulo: "Canción 3", src: "CANCIONES/cancion3.mp3", icono: "🎵" }
+    { titulo: "Canción 1", src: "CANCIONES/cancion-1.mp3", icono: "🌸" },
+    { titulo: "Canción 2", src: "CANCIONES/cancion-2.mp3", icono: "🚂" }
   ];
 
   let currentIndex = 0;
@@ -296,22 +418,36 @@
   const progressBar = document.getElementById('progressBar');
   const progressContainer = document.getElementById('progressContainer');
   const playlistEl = document.getElementById('playlist');
+  const currentTimeEl = document.getElementById('currentTime');
+  const totalTimeEl = document.getElementById('totalTime');
 
-  function cargarCancion(index){
+  function formatearTiempo(segundos) {
+    if (isNaN(segundos)) return '0:00';
+    const mins = Math.floor(segundos / 60);
+    const secs = Math.floor(segundos % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function cargarCancion(index) {
     currentIndex = index;
     const song = playlist[index];
     audio.src = song.src;
     titleEl.textContent = song.titulo;
     coverEl.textContent = song.icono;
-    document.querySelectorAll('.playlist-item').forEach((el,i)=>{
-      el.classList.toggle('active', i===index);
+    document.querySelectorAll('.playlist-item').forEach((el, i) => {
+      el.classList.toggle('active', i === index);
     });
-    hablar(song.titulo);
+    audio.addEventListener('loadedmetadata', function() {
+      totalTimeEl.textContent = formatearTiempo(audio.duration);
+    });
+    audio.onerror = function() {
+      totalTimeEl.textContent = '??:??';
+    };
   }
 
-  function togglePlay(){
-    if(audio.paused){
-      audio.play();
+  function togglePlay() {
+    if (audio.paused) {
+      audio.play().catch(e => {});
       playBtn.textContent = '⏸️';
     } else {
       audio.pause();
@@ -319,45 +455,53 @@
     }
   }
 
-  function siguiente(){
+  function siguiente() {
     cargarCancion((currentIndex + 1) % playlist.length);
-    audio.play();
+    audio.play().catch(e => {});
     playBtn.textContent = '⏸️';
   }
 
-  function anterior(){
+  function anterior() {
     cargarCancion((currentIndex - 1 + playlist.length) % playlist.length);
-    audio.play();
+    audio.play().catch(e => {});
     playBtn.textContent = '⏸️';
   }
 
-  audio.addEventListener('timeupdate', ()=>{
-    if(audio.duration){
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
       const percent = (audio.currentTime / audio.duration) * 100;
       progressBar.style.width = percent + '%';
+      currentTimeEl.textContent = formatearTiempo(audio.currentTime);
     }
   });
 
   audio.addEventListener('ended', siguiente);
 
-  progressContainer.addEventListener('click', (e)=>{
+  progressContainer.addEventListener('click', (e) => {
     const width = progressContainer.clientWidth;
     const clickX = e.offsetX;
-    if(audio.duration) audio.currentTime = (clickX / width) * audio.duration;
+    if (audio.duration) {
+      audio.currentTime = (clickX / width) * audio.duration;
+    }
   });
 
-  // Crear playlist visual
-  playlist.forEach((song, i)=>{
+  playlist.forEach((song, i) => {
     const item = document.createElement('div');
     item.className = 'playlist-item';
-    if(i===0) item.classList.add('active');
+    if (i === 0) item.classList.add('active');
     item.innerHTML = `<span class="playlist-icon">${song.icono}</span><span>${song.titulo}</span>`;
-    item.onclick = ()=>{ cargarCancion(i); audio.play(); playBtn.textContent='⏸️'; };
+    item.onclick = () => { cargarCancion(i); audio.play().catch(e=>{}); playBtn.textContent='⏸️'; };
     playlistEl.appendChild(item);
   });
 
-  // Cargar primera canción
   cargarCancion(0);
+
+  audio.addEventListener('play', () => playBtn.textContent = '⏸️');
+  audio.addEventListener('pause', () => playBtn.textContent = '▶️');
+
+  window.addEventListener('load', function() {
+    setTimeout(inicializarVoz, 200);
+  });
 </script>
 </body>
 </html>
