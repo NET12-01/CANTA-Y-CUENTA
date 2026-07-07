@@ -73,7 +73,6 @@
     min-height: 70px;
     margin: 10px 0 20px;
     transition: transform 0.2s;
-    word-break: break-all; /* Evita que las estrellas rompan el diseño en pantallas chicas */
   }
   .palabras-grid {
     display: grid;
@@ -104,14 +103,13 @@
     width: 180px;
     height: 180px;
     margin: 0 auto 20px;
+    background: linear-gradient(135deg, #a78bfa, #7dd3fc);
     border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    overflow: hidden;
-  }
-  .player-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
   .song-title {
     text-align: center;
@@ -186,18 +184,14 @@
     background: #ede9fe;
     border: 2px solid #8b5cf6;
   }
-  .playlist-img { 
-    width: 40px; 
-    height: 40px; 
-    border-radius: 8px; 
-    object-fit: cover; 
-  }
+  .playlist-icon { font-size: 1.5rem; }
 </style>
 </head>
 <body>
   <h1>🌟 Canta y Cuenta 🌟</h1>
   
   <div class="container">
+    <!-- LADO IZQUIERDO: VOZ -->
     <div class="card">
       <h2>🗣️ Aprende con Voz</h2>
       
@@ -211,7 +205,6 @@
         <button class="palabra-btn azul" onclick="hablar('azul')">Azul</button>
         <button class="palabra-btn verde" onclick="hablar('verde')">Verde</button>
         <button class="palabra-btn amarillo" onclick="hablar('amarillo')">Amarillo</button>
-        <button class="palabra-btn mama" onclick="hablar('mamá')">Mamá</button>
         <button class="palabra-btn papa" onclick="hablar('papá')">Papá</button>
         <button class="palabra-btn" style="background:#f97316; box-shadow:0 5px 0 #c2410c" onclick="hablar('hola')">Hola</button>
         <button class="palabra-btn" style="background:#14b8a6; box-shadow:0 5px 0 #0f766e" onclick="hablar('gracias')">Gracias</button>
@@ -219,12 +212,11 @@
       </div>
     </div>
 
+    <!-- LADO DERECHO: REPRODUCTOR -->
     <div class="card">
       <h2>🎵 Mi Música</h2>
       
-      <div class="player-cover">
-        <img id="coverImg" src="imagenes/cancion-1.jpg" alt="Portada">
-      </div>
+      <div class="player-cover" id="cover">🌸</div>
       <div class="song-title" id="title">Flores y Números</div>
       <div class="song-artist">Canta y Cuenta</div>
       
@@ -260,22 +252,16 @@
 
   function hablar(texto, esNumero=false){
     if(!('speechSynthesis' in window)) return;
-    
-    // MEJORA 1: Si hay música sonando, la pausamos automáticamente para escuchar la voz clara
-    if(!audio.paused) {
-      audio.pause();
-      playBtn.textContent = '▶️';
-    }
-
     speechSynthesis.cancel();
     
     const msg = new SpeechSynthesisUtterance(texto);
-    msg.lang = 'es-AR'; 
-    msg.rate = 0.75; // Un pelín más lento para niños chicos
+    msg.lang = 'es-AR'; // voz argentina, si no está usa la más cercana
+    msg.rate = 0.78;
     msg.pitch = 1.15;
     speechSynthesis.speak(msg);
 
     if(esNumero){
+      // mostrar estrellitas
       const mapa = {uno:1,dos:2,tres:3,cuatro:4,cinco:5,seis:6,siete:7,ocho:8,nueve:9,diez:10};
       const n = mapa[texto] || 0;
       if(n && visual){
@@ -283,7 +269,7 @@
         visual.style.transform = 'scale(1.2)';
         setTimeout(()=> visual.style.transform = 'scale(1)', 200);
       }
-      
+      // feedback positivo
       const feedback = new SpeechSynthesisUtterance(`¡Muy bien, ${texto}!`);
       feedback.lang = 'es-AR';
       feedback.rate = 0.85;
@@ -295,44 +281,37 @@
   }
 
   // ===== REPRODUCTOR =====
-  // MEJORA 2: Se cambiaron los íconos de texto por las rutas a tus imágenes reales
   const playlist = [
-    { titulo: "Flores y Números", src: "CANCIONES/Flores y Números.mp3", img: "imagenes/cancion-1.jpg" },
-    { titulo: "El Tren de la Amistad", src: "CANCIONES/Eltrendelaamistad.mp3", img: "imagenes/cancion-2.jpg" },
-    { titulo: "Canción 2", src: "CANCIONES/cancion2.mp3", img: "imagenes/cancion-1.jpg" },
-    { titulo: "Canción 3", src: "CANCIONES/cancion3.mp3", img: "imagenes/cancion-2.jpg" }
+    { titulo: "Flores y Números", src: "CANCIONES/Flores y Números.mp3", icono: "🌸" },
+    { titulo: "El Tren de la Amistad", src: "CANCIONES/Eltrendelaamistad.mp3", icono: "🚂" },
+    { titulo: "Canción 2", src: "CANCIONES/cancion2.mp3", icono: "🎶" },
+    { titulo: "Canción 3", src: "CANCIONES/cancion3.mp3", icono: "🎵" }
   ];
 
   let currentIndex = 0;
   const audio = document.getElementById('audio');
   const playBtn = document.getElementById('playBtn');
   const titleEl = document.getElementById('title');
-  const coverImg = document.getElementById('coverImg');
+  const coverEl = document.getElementById('cover');
   const progressBar = document.getElementById('progressBar');
   const progressContainer = document.getElementById('progressContainer');
   const playlistEl = document.getElementById('playlist');
 
-  function cargarCancion(index, anunciarVoz = true){
+  function cargarCancion(index){
     currentIndex = index;
     const song = playlist[index];
     audio.src = song.src;
     titleEl.textContent = song.titulo;
-    coverImg.src = song.img; // Carga la foto real en el reproductor principal
-    
+    coverEl.textContent = song.icono;
     document.querySelectorAll('.playlist-item').forEach((el,i)=>{
       el.classList.toggle('active', i===index);
     });
-    
-    // MEJORA 3: Solo anuncia el título con voz si el usuario interactuó (hizo clic), evitando bloqueos del navegador
-    if (anunciarVoz) {
-      hablar(song.titulo);
-    }
+    hablar(song.titulo);
   }
 
   function togglePlay(){
     if(audio.paused){
-      speechSynthesis.cancel(); // Cancela cualquier lección de voz si empieza la música
-      audio.play().catch(()=>{});
+      audio.play();
       playBtn.textContent = '⏸️';
     } else {
       audio.pause();
@@ -342,13 +321,13 @@
 
   function siguiente(){
     cargarCancion((currentIndex + 1) % playlist.length);
-    audio.play().catch(()=>{});
+    audio.play();
     playBtn.textContent = '⏸️';
   }
 
   function anterior(){
     cargarCancion((currentIndex - 1 + playlist.length) % playlist.length);
-    audio.play().catch(()=>{});
+    audio.play();
     playBtn.textContent = '⏸️';
   }
 
@@ -367,22 +346,18 @@
     if(audio.duration) audio.currentTime = (clickX / width) * audio.duration;
   });
 
-  // Crear playlist visual con imágenes pequeñas al lado de los títulos
+  // Crear playlist visual
   playlist.forEach((song, i)=>{
     const item = document.createElement('div');
     item.className = 'playlist-item';
     if(i===0) item.classList.add('active');
-    item.innerHTML = `<img class="playlist-img" src="${song.img}" alt=""><span>${song.titulo}</span>`;
-    item.onclick = ()=>{ 
-      cargarCancion(i); 
-      audio.play().catch(()=>{}); 
-      playBtn.textContent='⏸️'; 
-    };
+    item.innerHTML = `<span class="playlist-icon">${song.icono}</span><span>${song.titulo}</span>`;
+    item.onclick = ()=>{ cargarCancion(i); audio.play(); playBtn.textContent='⏸️'; };
     playlistEl.appendChild(item);
   });
 
-  // Carga inicial pasiva (anunciarVoz = false para no romper las políticas del navegador)
-  cargarCancion(0, false);
+  // Cargar primera canción
+  cargarCancion(0);
 </script>
 </body>
 </html>
