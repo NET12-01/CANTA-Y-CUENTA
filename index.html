@@ -98,6 +98,36 @@
     transform: translateY(3px);
     box-shadow: 0 1px 0 rgba(0,0,0,0.2);
   }
+  /* Nueva sección de colores - grid de 4 columnas */
+  .colores-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .color-btn {
+    aspect-ratio: 1;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 18px;
+    color: white;
+    cursor: pointer;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+    transition: all 0.08s;
+    padding: 0 5px;
+  }
+  .color-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+  }
+  /* Para colores claros, texto oscuro */
+  .color-btn.text-dark {
+    color: #1f2937;
+    text-shadow: none;
+  }
+  /* Palabras adicionales */
   .palabras-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -116,6 +146,7 @@
     transition: all 0.08s;
   }
   .palabra-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
+  /* Clases para palabras (colores de fondo) */
   .rojo { background: #ef4444; box-shadow: 0 5px 0 #b91c1c; }
   .azul { background: #3b82f6; box-shadow: 0 5px 0 #1d4ed8; }
   .verde { background: #22c55e; box-shadow: 0 5px 0 #15803d; }
@@ -141,6 +172,7 @@
   }
   .stop-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #991b1b; }
 
+  /* Reproductor */
   .player-cover {
     width: 180px;
     height: 180px;
@@ -254,7 +286,11 @@
       <h3 style="margin: 15px 0 12px; color:#374151;">Abecedario:</h3>
       <div class="abecedario-grid" id="abecedario"></div>
       
-      <h3 style="margin: 15px 0 12px; color:#374151;">Palabras y Colores:</h3>
+      <!-- SECCIÓN DE COLORES AMPLIADA -->
+      <h3 style="margin: 15px 0 12px; color:#374151;">🎨 Colores:</h3>
+      <div class="colores-grid" id="colores"></div>
+      
+      <h3 style="margin: 15px 0 12px; color:#374151;">Palabras:</h3>
       <div class="palabras-grid" id="palabras"></div>
       
       <button class="stop-btn" onclick="detenerVoz()">🔇 ¡Silencio!</button>
@@ -376,12 +412,38 @@
     abecedarioContainer.appendChild(btn);
   });
 
-  // ===== PALABRAS Y COLORES =====
+  // ===== COLORES (ampliado a 16) =====
+  const colores = [
+    { nombre: 'Rojo', fondo: '#ef4444', oscuro: true },
+    { nombre: 'Azul', fondo: '#3b82f6', oscuro: true },
+    { nombre: 'Verde', fondo: '#22c55e', oscuro: true },
+    { nombre: 'Amarillo', fondo: '#eab308', oscuro: true },
+    { nombre: 'Naranja', fondo: '#f97316', oscuro: true },
+    { nombre: 'Morado', fondo: '#8b5cf6', oscuro: true },
+    { nombre: 'Rosa', fondo: '#ec4899', oscuro: true },
+    { nombre: 'Marrón', fondo: '#92400e', oscuro: true },
+    { nombre: 'Gris', fondo: '#6b7280', oscuro: true },
+    { nombre: 'Celeste', fondo: '#06b6d4', oscuro: true },
+    { nombre: 'Turquesa', fondo: '#14b8a6', oscuro: true },
+    { nombre: 'Violeta', fondo: '#a855f7', oscuro: true },
+    { nombre: 'Rosa Claro', fondo: '#fbcfe8', oscuro: false },
+    { nombre: 'Verde Claro', fondo: '#86efac', oscuro: false },
+    { nombre: 'Azul Oscuro', fondo: '#1e3a8a', oscuro: true },
+    { nombre: 'Gris Claro', fondo: '#d1d5db', oscuro: false }
+  ];
+  const coloresContainer = document.getElementById('colores');
+  colores.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'color-btn' + (c.oscuro ? '' : ' text-dark');
+    btn.textContent = c.nombre;
+    btn.style.background = c.fondo;
+    btn.setAttribute('aria-label', `Color ${c.nombre}`);
+    btn.onclick = () => hablar(c.nombre, false);
+    coloresContainer.appendChild(btn);
+  });
+
+  // ===== PALABRAS (adicionales) =====
   const palabras = [
-    { texto: 'Rojo', clase: 'rojo' },
-    { texto: 'Azul', clase: 'azul' },
-    { texto: 'Verde', clase: 'verde' },
-    { texto: 'Amarillo', clase: 'amarillo' },
     { texto: 'Papá', clase: 'papa' },
     { texto: 'Mamá', clase: 'rosa' },
     { texto: 'Hola', clase: 'naranja' },
