@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -98,7 +99,6 @@
     transform: translateY(3px);
     box-shadow: 0 1px 0 rgba(0,0,0,0.2);
   }
-  /* Nueva sección de colores - grid de 4 columnas */
   .colores-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -122,12 +122,10 @@
     transform: translateY(4px);
     box-shadow: 0 1px 0 rgba(0,0,0,0.2);
   }
-  /* Para colores claros, texto oscuro */
   .color-btn.text-dark {
     color: #1f2937;
     text-shadow: none;
   }
-  /* Palabras adicionales */
   .palabras-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -146,7 +144,6 @@
     transition: all 0.08s;
   }
   .palabra-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
-  /* Clases para palabras (colores de fondo) */
   .rojo { background: #ef4444; box-shadow: 0 5px 0 #b91c1c; }
   .azul { background: #3b82f6; box-shadow: 0 5px 0 #1d4ed8; }
   .verde { background: #22c55e; box-shadow: 0 5px 0 #15803d; }
@@ -172,7 +169,6 @@
   }
   .stop-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #991b1b; }
 
-  /* Reproductor */
   .player-cover {
     width: 180px;
     height: 180px;
@@ -275,7 +271,6 @@
   <h1>🌟 Canta y Cuenta 🌟</h1>
   
   <div class="container">
-    <!-- LADO IZQUIERDO: VOZ -->
     <div class="card">
       <h2>🗣️ Aprende con Voz</h2>
       
@@ -286,7 +281,6 @@
       <h3 style="margin: 15px 0 12px; color:#374151;">Abecedario:</h3>
       <div class="abecedario-grid" id="abecedario"></div>
       
-      <!-- SECCIÓN DE COLORES AMPLIADA -->
       <h3 style="margin: 15px 0 12px; color:#374151;">🎨 Colores:</h3>
       <div class="colores-grid" id="colores"></div>
       
@@ -296,7 +290,6 @@
       <button class="stop-btn" onclick="detenerVoz()">🔇 ¡Silencio!</button>
     </div>
 
-    <!-- LADO DERECHO: REPRODUCTOR -->
     <div class="card">
       <h2>🎵 Mi Música</h2>
       
@@ -325,7 +318,7 @@
   </div>
 
 <script>
-  // ===== VOZ ARGENTINA MEJORADA =====
+  // ===== VOZ ARGENTINA =====
   let vozSeleccionada = null;
   let encolarFeedback = false;
   let numeroActual = '';
@@ -412,7 +405,7 @@
     abecedarioContainer.appendChild(btn);
   });
 
-  // ===== COLORES (ampliado a 16) =====
+  // ===== COLORES =====
   const colores = [
     { nombre: 'Rojo', fondo: '#ef4444', oscuro: true },
     { nombre: 'Azul', fondo: '#3b82f6', oscuro: true },
@@ -442,7 +435,7 @@
     coloresContainer.appendChild(btn);
   });
 
-  // ===== PALABRAS (adicionales) =====
+  // ===== PALABRAS =====
   const palabras = [
     { texto: 'Papá', clase: 'papa' },
     { texto: 'Mamá', clase: 'rosa' },
@@ -466,10 +459,11 @@
     palabrasContainer.appendChild(btn);
   });
 
-  // ===== REPRODUCTOR =====
+  // ===== REPRODUCTOR (CON 3 CANCIONES) =====
   const playlist = [
     { titulo: "Canción 1", src: "CANCIONES/cancion-1.mp3", icono: "🌸" },
-    { titulo: "Canción 2", src: "CANCIONES/cancion-2.mp3", icono: "🚂" }
+    { titulo: "Canción 2", src: "CANCIONES/cancion-2.mp3", icono: "🚂" },
+    { titulo: "El Arcoíris", src: "CANCIONES/cancion-3.mp3", icono: "🌈" }  // <--- NUEVA
   ];
 
   let currentIndex = 0;
